@@ -1,0 +1,75 @@
+/*******************************************************************************
+ * Solitaire
+ * 
+ * Copyright (C) 2025 by Martin P. Robillard
+ * 
+ * See: https://github.com/prmr/Solitaire
+ * 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see http://www.gnu.org/licenses/.
+ *******************************************************************************/
+package ca.mcgill.solitaire.gui;
+
+import ca.mcgill.solitaire.cards.Deck;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
+/**
+ * Main class for the Solitaire application.
+ */
+public class Solitaire extends Application {
+	
+	private static final int WIDTH = 680;
+	private static final int HEIGHT = 500;
+	private static final int MARGIN = 10;
+	
+	@Override
+	public void start(Stage pPrimaryStage) {
+		pPrimaryStage.setTitle("Solitaire");
+		pPrimaryStage.setResizable(false);
+		
+		GridPane root = new GridPane();
+		root.setHgap(MARGIN);
+		root.setVgap(MARGIN);
+		root.setPadding(new Insets(MARGIN));
+		
+		DeckView deckView = new DeckView();
+		DiscardPileView discardPileView = new DiscardPileView();
+		SuitStack suitStack = new SuitStack();
+		CardPileView cardPileView = new CardPileView();
+		
+		root.add(deckView, 0, 0);
+		root.add(discardPileView, 1, 0);
+		root.add(suitStack, 3, 0, 4, 1);
+		root.add(cardPileView, 0, 1, 7, 1);
+		
+		pPrimaryStage.setScene(new Scene(root, WIDTH, HEIGHT));
+		pPrimaryStage.show();
+	}
+	
+	public static void main(String[] args) {
+		if (args.length > 0) {
+			try {
+				int config = Integer.parseInt(args[0]);
+				Deck.CONFIGURATION_INDEX = config;
+				System.out.println("Loaded winnable deck configuration: " + config);
+			} catch (NumberFormatException e) {
+				System.err.println("Invalid configuration argument. Using default (1).");
+			}
+		}
+		launch(args);
+	}
+}

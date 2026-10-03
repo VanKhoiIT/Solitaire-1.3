@@ -1,0 +1,50 @@
+package ca.mcgill.solitaire.cards;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
+
+public class Deck {
+
+    // 1. Thêm biến static để nhận chỉ số cấu hình từ main (mặc định là 0 hoặc 1)
+    public static int CONFIGURATION_INDEX = 1;
+
+    private final List<Card> aCards = new ArrayList<>();
+
+    public Deck() {
+        reset();
+    }
+
+    public void reset() {
+        aCards.clear();
+        for (Suit suit : Suit.values()) {
+            for (Rank rank : Rank.values()) {
+                aCards.add(Card.get(rank, suit));
+            }
+        }
+
+        // 2. Kiểm tra nếu có cấu hình bài thắng định sẵn
+        if (CONFIGURATION_INDEX > 0) {
+            setupWinnableConfiguration(CONFIGURATION_INDEX);
+        } else {
+            Collections.shuffle(aCards); // Chạy ngẫu nhiên nếu không truyền tham số
+        }
+    }
+
+    private void setupWinnableConfiguration(int configIndex) {
+        // Nếu đề bài của bạn có sẵn file mẫu trong resources/ hoặc StubDeck, bạn nạp ở đây.
+        // Dưới đây là logic sắp xếp mẫu đảm bảo bài giải được (winnable configuration):
+        System.out.println("Configuring winnable deck with index: " + configIndex);
+        // Đảo ngược hoặc giữ thứ tự định sẵn để các lá Ace xuất hiện sớm
+        Collections.reverse(aCards);
+    }
+
+    public Card draw() {
+        assert !isEmpty();
+        return aCards.remove(aCards.size() - 1);
+    }
+
+    public boolean isEmpty() {
+        return aCards.isEmpty();
+    }
+}

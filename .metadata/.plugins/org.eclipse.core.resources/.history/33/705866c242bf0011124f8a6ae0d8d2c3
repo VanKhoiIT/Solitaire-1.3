@@ -1,0 +1,45 @@
+package ca.mcgill.solitaire.gui;
+
+import ca.mcgill.solitaire.cards.Deck;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+
+public class Solitaire extends Application {
+
+	private static final int WIDTH = 700;
+	private static final int HEIGHT = 500;
+
+	@Override
+	public void start(Stage pPrimaryStage) {
+		pPrimaryStage.setTitle("Solitaire");
+		
+		BorderPane root = new BorderPane();
+		HBox topBar = new HBox();
+		topBar.getChildren().add(new DeckView());
+		topBar.getChildren().add(new DiscardPileView());
+		
+		root.setTop(topBar);
+
+		pPrimaryStage.setScene(new Scene(root, WIDTH, HEIGHT));
+		pPrimaryStage.show();
+	}
+
+	public static void main(String[] args) {
+		// Đọc cấu hình bài truyền vào từ dòng lệnh
+		if (args.length > 0) {
+			try {
+				int config = Integer.parseInt(args[0]);
+				Deck.CONFIGURATION_INDEX = config;
+				System.out.println("Loaded winnable deck configuration: " + config);
+			} catch (NumberFormatException e) {
+				System.err.println("Invalid configuration argument. Using default (1).");
+			}
+		}
+
+		// Khởi chạy ứng dụng GUI JavaFX
+		launch(args);
+	}
+}

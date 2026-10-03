@@ -1,0 +1,149 @@
+/*******************************************************************************
+ * Solitaire
+ * 
+ * Copyright (C) 2025 by Martin P. Robillard
+ * 
+ * See: https://github.com/prmr/Solitaire
+ * 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see http://www.gnu.org/licenses/.
+ *******************************************************************************/
+package ca.mcgill.solitaire.cards;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Represents a deck of 52 cards constructed with a pre-determined order
+ * that allows a player to win the game.
+ */
+public class Deck {
+	
+	/**
+	 * Chỉ số cấu hình được chọn từ dòng lệnh (mặc định = 1).
+	 */
+	public static int CONFIGURATION_INDEX = 1;
+
+	private CardStack aCards;
+
+	/**
+	 * Creates a new deck of 52 cards with a pre-determined winnable configuration.
+	 */
+	public Deck() {
+		initialize(CONFIGURATION_INDEX);
+	}
+
+	/**
+	 * Creates a new deck with a specific configuration index.
+	 * 
+	 * @param pConfiguration The configuration ID to load.
+	 */
+	public Deck(int pConfiguration) {
+		initialize(pConfiguration);
+	}
+
+	/**
+	 * Khởi tạo bộ bài theo thứ tự định sẵn mà không shuffle.
+	 * 
+	 * @param pConfig Mã cấu hình mong muốn.
+	 */
+	public void initialize(int pConfig) {
+		List<Card> cards = new ArrayList<>();
+
+		switch (pConfig) {
+			case 2:
+				// Cấu hình 2: Xếp theo thứ tự từ KING -> ACE cho từng chất
+				for (Suit suit : Suit.values()) {
+					Rank[] ranks = Rank.values();
+					for (int i = ranks.length - 1; i >= 0; i--) {
+						cards.add(Card.get(ranks[i], suit));
+					}
+				}
+				break;
+
+			case 3:
+				// Cấu hình 3: Xếp ngược chất nhưng cùng thứ tự Rank
+				Suit[] suits = Suit.values();
+				for (int i = suits.length - 1; i >= 0; i--) {
+					for (Rank rank : Rank.values()) {
+						cards.add(Card.get(rank, suits[i]));
+					}
+				}
+				break;
+
+			case 1:
+			default:
+				// Cấu hình 1 (Thắng dễ):
+				// Xếp tuần tự từ ACE -> KING cho từng chất.
+				for (Suit suit : Suit.values()) {
+					for (Rank rank : Rank.values()) {
+						cards.add(Card.get(rank, suit));
+					}
+				}
+				break;
+		}
+
+		aCards = new CardStack(cards);
+	}
+
+	/**
+	 * Giữ lại phương thức shuffle để tương thích với các interface/test có sẵn,
+	 * nhưng tải lại cấu hình định sẵn thay vì xáo ngẫu nhiên.
+	 */
+	public void shuffle() {
+		initialize(CONFIGURATION_INDEX);
+	}
+
+	/**
+	 * Places pCard on top of the deck.
+	 * 
+	 * @param pCard The card to place on top of the deck.
+	 * @pre pCard != null
+	 */
+	public void push(Card pCard) {
+		assert pCard != null;
+		aCards.push(pCard);
+	}
+
+	/**
+	 * Draws a card from the deck and removes the card from the deck.
+	 * 
+	 * @return The card drawn.
+	 * @pre !isEmpty()
+	 */
+	public Card draw() {
+		assert !isEmpty();
+		return aCards.pop();
+	}
+
+	/**
+	 * Bổ sung method pop() tương thích trực tiếp với Solitaire 1.3 và test case
+	 */
+	public Card pop() {
+		return draw();
+	}
+
+	/**
+	 * @return True iff there are no cards in the deck.
+	 */
+	public boolean isEmpty() {
+		return aCards.isEmpty();
+	}
+
+	/**
+	 * @return The number of cards in the deck.
+	 */
+	public int size() {
+		return aCards.size();
+	}
+}

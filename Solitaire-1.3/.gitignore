@@ -1,0 +1,13 @@
+# Thư mục chứa file biên dịch tự sinh (.class)
+bin/
+*.class
+
+# Cấu hình riêng của VS Code và Eclipse metadata
+.metadata/
+.settings/
+.vscode/
+
+# File tạm hệ thống
+*.log
+Thumbs.db
+.DS_Store

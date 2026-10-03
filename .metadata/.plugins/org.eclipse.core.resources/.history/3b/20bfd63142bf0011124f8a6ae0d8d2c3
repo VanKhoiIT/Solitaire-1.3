@@ -1,0 +1,16 @@
+public static void main(String[] args) {
+	// Đọc cấu hình truyền vào từ command line (nếu có)
+	if (args.length > 0) {
+		try {
+			int config = Integer.parseInt(args[0]);
+			Deck.CONFIGURATION_INDEX = config;
+			System.out.println("Loaded winnable deck configuration: " + config);
+		}
+		catch (NumberFormatException e) {
+			System.err.println("Invalid configuration argument. Using default (1).");
+		}
+	}
+
+	// Gọi phương thức khởi chạy ứng dụng GUI có sẵn của JavaFX
+	launch(args);
+}

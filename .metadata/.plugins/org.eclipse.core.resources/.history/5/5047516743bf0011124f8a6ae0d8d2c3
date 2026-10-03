@@ -1,0 +1,50 @@
+package ca.mcgill.solitaire.gui;
+
+import ca.mcgill.solitaire.cards.Deck;
+import ca.mcgill.solitaire.model.GameModel;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
+public class Solitaire extends Application {
+
+	private static final int WIDTH = 680;
+	private static final int HEIGHT = 500;
+	private static final int MARGIN = 10;
+
+	private GameModel aModel = new GameModel();
+
+	@Override
+	public void start(Stage pPrimaryStage) {
+		pPrimaryStage.setTitle("Solitaire");
+		pPrimaryStage.setResizable(false);
+
+		GridPane root = new GridPane();
+		root.setHgap(MARGIN);
+		root.setVgap(MARGIN);
+		root.setPadding(new Insets(MARGIN));
+
+		root.add(new DiscardPileView(aModel), 1, 0);
+		root.add(new SuitStack(aModel), 3, 0, 4, 1);
+		root.add(new CardPileView(aModel), 0, 1, 7, 1);
+
+		pPrimaryStage.setScene(new Scene(root, WIDTH, HEIGHT));
+		pPrimaryStage.show();
+	}
+
+	public static void main(String[] args) {
+		if (args.length > 0) {
+			try {
+				int config = Integer.parseInt(args[0]);
+				Deck.CONFIGURATION_INDEX = config;
+				System.out.println("Loaded winnable deck configuration: " + config);
+			} catch (NumberFormatException e) {
+				System.err.println("Invalid configuration argument. Using default (1).");
+			}
+		}
+
+		launch(args);
+	}
+}
