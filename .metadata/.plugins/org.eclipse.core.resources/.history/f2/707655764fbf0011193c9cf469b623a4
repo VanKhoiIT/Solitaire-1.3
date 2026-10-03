@@ -78,7 +78,7 @@ public class Solitaire extends Application {
 
 		// Hien thi 4 o Foundation goc tren ben phai
 		for (FoundationPile index : FoundationPile.values()) {
-			root.add(new SuitStack(model, index), index.ordinal() + 3, 0);
+		    root.add(new SuitStackView(model, index), index.ordinal() + 3, 0);
 		}
 		// Hien thi 7 cot Tableau ben duoi
 		for (TableauPile index : TableauPile.values()) {

@@ -42,8 +42,6 @@ public class Deck {
 	}
 
 	public void initialize(int pConfig) {
-		List<Card> cards = new ArrayList<>();
-
 		Suit[] suits;
 		switch (pConfig) {
 			case 2:
@@ -58,25 +56,35 @@ public class Deck {
 				break;
 		}
 
-		// 1. Chuẩn bị 28 lá đầu tiên cho 7 cột Tableau
-		// Xếp sao cho các lá nằm trong Tableau là các lá King, Queen, Jack, 10, 9, 8, 7
-		// và xếp ngược để khi lật ra là dọn được ngay
-		for (int r = 12; r >= 6; r--) {
+		// Tao du 52 la bai theo thu tu Rank tu Ace -> King
+		List<Card> allCards = new ArrayList<>();
+		for (Rank rank : Rank.values()) {
 			for (Suit suit : suits) {
-				cards.add(Card.get(Rank.values()[r], suit));
+				allCards.add(Card.get(rank, suit));
 			}
 		}
 
-		// 2. Chuẩn bị 24 lá còn lại cho cọc rút (Deck)
-		// Đi từ quân 6 lùi dần về Ace theo từng vòng 4 chất
-		// Khi nạp vào Stack, 4 con Át sẽ nằm ngay đỉnh trên cùng!
-		for (int r = 5; r >= 0; r--) {
-			for (int s = suits.length - 1; s >= 0; s--) {
-				cards.add(Card.get(Rank.values()[r], suits[s]));
-			}
+		// Thiet lap thu tu sao cho sau khi chia 28 la ra 7 cot,
+		// toan bo bai nho va At duoc giai phong hoan toan khi bam Enter
+		List<Card> dealOrder = new ArrayList<>();
+		
+		// 28 la bai chia vao 7 cot Tableau (lat tu tren xuong)
+		for (int i = 0; i < 28; i++) {
+			dealOrder.add(allCards.get(i));
+		}
+		
+		// 24 la con lai nam trong coc rut (Deck)
+		for (int i = 28; i < 52; i++) {
+			dealOrder.add(allCards.get(i));
 		}
 
-		aCards = new CardStack(cards);
+		// Nap vao Stack theo chieu nguoc de la dau tien rut ra o vi tri tren cung
+		List<Card> stackCards = new ArrayList<>();
+		for (int i = dealOrder.size() - 1; i >= 0; i--) {
+			stackCards.add(dealOrder.get(i));
+		}
+
+		aCards = new CardStack(stackCards);
 	}
 
 	public void shuffle() {

@@ -58,21 +58,18 @@ public class Deck {
 				break;
 		}
 
-		// 1. Chuẩn bị 28 lá đầu tiên cho 7 cột Tableau
-		// Xếp sao cho các lá nằm trong Tableau là các lá King, Queen, Jack, 10, 9, 8, 7
-		// và xếp ngược để khi lật ra là dọn được ngay
-		for (int r = 12; r >= 6; r--) {
-			for (Suit suit : suits) {
-				cards.add(Card.get(Rank.values()[r], suit));
+		// 28 la phan bai lon cho cac cot ben duoi
+		for (Suit suit : suits) {
+			Rank[] ranks = Rank.values();
+			for (int i = ranks.length - 1; i >= 6; i--) {
+				cards.add(Card.get(ranks[i], suit));
 			}
 		}
 
-		// 2. Chuẩn bị 24 lá còn lại cho cọc rút (Deck)
-		// Đi từ quân 6 lùi dần về Ace theo từng vòng 4 chất
-		// Khi nạp vào Stack, 4 con Át sẽ nằm ngay đỉnh trên cùng!
-		for (int r = 5; r >= 0; r--) {
-			for (int s = suits.length - 1; s >= 0; s--) {
-				cards.add(Card.get(Rank.values()[r], suits[s]));
+		// 24 la bai nho de rut lien tuc tu ACE len thang 4 o dich
+		for (int r = 0; r < 6; r++) {
+			for (Suit suit : suits) {
+				cards.add(Card.get(Rank.values()[r], suit));
 			}
 		}
 
